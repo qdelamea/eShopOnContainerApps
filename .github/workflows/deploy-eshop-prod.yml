@@ -19,7 +19,7 @@ jobs:
     uses: qdelamea/eShopOnContainerApps/.github/workflows/service-build.yml@main
     with:
       serviceName: basket.api
-      registryName: ${{ env.REGISTRY_NAME }}
+      registryName: acrdw5jt22hnrywq
     secrets:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
