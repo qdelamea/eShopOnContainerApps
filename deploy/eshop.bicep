@@ -1,5 +1,10 @@
 param location string = resourceGroup().location
 param uniqueSeed string = '${resourceGroup().id}-${deployment().name}'
+param keyVaultName string = 'eShopKVhqyobk5cu5ahg'
+
+resource keyVault 'Microsoft.KeyVault/vaults@2021-04-01-preview' existing = {
+  name: keyVaultName
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Infrastructure
@@ -18,6 +23,7 @@ module cosmos 'modules/infra/cosmos-db.bicep' = {
   params: {
     location: location
     uniqueSeed: uniqueSeed
+    keyVaultName: keyVaultName
   }
 }
 
@@ -26,6 +32,7 @@ module serviceBus 'modules/infra/service-bus.bicep' = {
   params: {
     location: location
     uniqueSeed: uniqueSeed
+    keyVaultName: keyVaultName
   }
 }
 
@@ -34,6 +41,8 @@ module sqlServer 'modules/infra/sql-server.bicep' = {
   params: {
     location: location
     uniqueSeed: uniqueSeed
+    sqlAdministratorLoginPassword: keyVault.getSecret('sqlAdministratorLoginPassword')
+    keyVaultName: keyVaultName
   }
 }
 
@@ -41,7 +50,7 @@ module sqlServer 'modules/infra/sql-server.bicep' = {
 // Container apps
 ////////////////////////////////////////////////////////////////////////////////
 
-module basketApi 'modules/apps/basket-api.bicep' = {
+module basketApi 'modules/containerapps/basket-api.bicep' = {
   name: '${deployment().name}-app-basket-api'
   dependsOn: [
     containerAppsEnvironment
@@ -57,12 +66,13 @@ module basketApi 'modules/apps/basket-api.bicep' = {
     cosmosDbName: cosmos.outputs.cosmosDbName
     cosmosCollectionName: cosmos.outputs.cosmosCollectionName
     cosmosUrl: cosmos.outputs.cosmosUrl
-    cosmosKey: cosmos.outputs.cosmosKey
-    serviceBusConnectionString: serviceBus.outputs.connectionString
+    cosmosKey: keyVault.getSecret('cosmosKey')
+    serviceBusConnectionString: keyVault.getSecret('serviceBusConnectionString')
+    containerRegistryPassword: keyVault.getSecret('containerRegistryPassword')
   }
 }
 
-module blazorClient 'modules/apps/blazor-client.bicep' = {
+module blazorClient 'modules/containerapps/blazor-client.bicep' = {
   name: '${deployment().name}-app-blazor-client'
   dependsOn: [
     containerAppsEnvironment
@@ -76,7 +86,7 @@ module blazorClient 'modules/apps/blazor-client.bicep' = {
   }
 }
 
-module catalogApi 'modules/apps/catalog-api.bicep' = {
+module catalogApi 'modules/containerapps/catalog-api.bicep' = {
   name: '${deployment().name}-app-catalog-api'
   dependsOn: [
     containerAppsEnvironment
@@ -88,12 +98,12 @@ module catalogApi 'modules/apps/catalog-api.bicep' = {
     location: location
     seqFqdn: seq.outputs.fqdn
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
-    catalogDbConnectionString: sqlServer.outputs.catalogDbConnectionString
-    serviceBusConnectionString: serviceBus.outputs.connectionString
+    catalogDbConnectionString: keyVault.getSecret('catalogDbConnectionString')
+    serviceBusConnectionString: keyVault.getSecret('serviceBusConnectionString')
   }
 }
 
-module identityApi 'modules/apps/identity-api.bicep' = {
+module identityApi 'modules/containerapps/identity-api.bicep' = {
   name: '${deployment().name}-app-identity-api'
   dependsOn: [
     containerAppsEnvironment
@@ -105,11 +115,11 @@ module identityApi 'modules/apps/identity-api.bicep' = {
     seqFqdn: seq.outputs.fqdn
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
     containerAppsEnvironmentDomain: containerAppsEnvironment.outputs.containerAppsEnvironmentDomain
-    identityDbConnectionString: sqlServer.outputs.identityDbConnectionString
+    identityDbConnectionString: keyVault.getSecret('identityDbConnectionString')
   }
 }
 
-module orderingApi 'modules/apps/ordering-api.bicep' = {
+module orderingApi 'modules/containerapps/ordering-api.bicep' = {
   name: '${deployment().name}-app-ordering-api'
   dependsOn: [
     containerAppsEnvironment
@@ -126,13 +136,13 @@ module orderingApi 'modules/apps/ordering-api.bicep' = {
     cosmosDbName: cosmos.outputs.cosmosDbName
     cosmosCollectionName: cosmos.outputs.cosmosCollectionName
     cosmosUrl: cosmos.outputs.cosmosUrl
-    cosmosKey: cosmos.outputs.cosmosKey
-    orderingDbConnectionString: sqlServer.outputs.identityDbConnectionString
-    serviceBusConnectionString: serviceBus.outputs.connectionString
+    cosmosKey: keyVault.getSecret('cosmosKey')
+    orderingDbConnectionString: keyVault.getSecret('orderingDbConnectionString')
+    serviceBusConnectionString: keyVault.getSecret('serviceBusConnectionString')
   }
 }
 
-module paymentApi 'modules/apps/payment-api.bicep' = {
+module paymentApi 'modules/containerapps/payment-api.bicep' = {
   name: '${deployment().name}-app-payment-api'
   dependsOn: [
     containerAppsEnvironment
@@ -143,11 +153,11 @@ module paymentApi 'modules/apps/payment-api.bicep' = {
     location: location
     seqFqdn: seq.outputs.fqdn
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
-    serviceBusConnectionString: serviceBus.outputs.connectionString
+    serviceBusConnectionString: keyVault.getSecret('serviceBusConnectionString')
   }
 }
 
-module seq 'modules/apps/seq.bicep' = {
+module seq 'modules/containerapps/seq.bicep' = {
   name: '${deployment().name}-app-seq'
   dependsOn: [
     containerAppsEnvironment
@@ -158,7 +168,7 @@ module seq 'modules/apps/seq.bicep' = {
   }
 }
 
-module webshoppingAgg 'modules/apps/webshopping-agg.bicep' = {
+module webshoppingAgg 'modules/containerapps/webshopping-agg.bicep' = {
   name: '${deployment().name}-app-webshopping-agg'
   dependsOn: [
     containerAppsEnvironment
@@ -172,7 +182,7 @@ module webshoppingAgg 'modules/apps/webshopping-agg.bicep' = {
   }
 }
 
-module webshoppingGW 'modules/apps/webshopping-gw.bicep' = {
+module webshoppingGW 'modules/containerapps/webshopping-gw.bicep' = {
   name: '${deployment().name}-app-webshopping-gw'
   dependsOn: [
     containerAppsEnvironment
@@ -185,7 +195,7 @@ module webshoppingGW 'modules/apps/webshopping-gw.bicep' = {
   }
 }
 
-module webstatus 'modules/apps/webstatus.bicep' = {
+module webstatus 'modules/containerapps/webstatus.bicep' = {
   name: '${deployment().name}-app-webstatus'
   dependsOn: [
     containerAppsEnvironment

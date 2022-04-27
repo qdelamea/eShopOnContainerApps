@@ -13,6 +13,9 @@ param cosmosKey string
 @secure()
 param serviceBusConnectionString string
 
+@secure()
+param containerRegistryPassword string
+
 resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
   name: 'basket-api'
   location: location
@@ -22,7 +25,7 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
       containers: [
         {
           name: 'basket-api'
-          image: 'eshopdapr/basket.api:20220331'
+          image: 'eshopdapr/basket-api:latest'
           env: [
             {
               name: 'ASPNETCORE_ENVIRONMENT'
@@ -82,9 +85,6 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
                 value: 'true'
               }
             ]
-            scopes: [
-              'basket-api'
-            ]
           }
           {
             name: 'pubsub'
@@ -96,15 +96,12 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
                 secretRef: 'service-bus-connection-string'
               }
             ]
-            scopes: [
-              'basket-api'
-            ]
           }
         ]
       }
     }
     configuration: {
-      activeResivionsMode: 'single'
+      activeRevisionsMode: 'single'
       ingress: {
         external: false
         targetPort: 80
@@ -118,6 +115,10 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
         {
           name: 'service-bus-connection-string'
           value: serviceBusConnectionString
+        }
+        {
+          name: 'container-registry-password'
+          value: containerRegistryPassword
         }
       ]
     }

@@ -13,7 +13,7 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
       containers: [
         {
           name: 'blazor-client'
-          image: 'eshopdapr/blazor.client:20220331'
+          image: 'eshopdapr/blazor.client:latest'
           env: [
             {
               name: 'ASPNETCORE_ENVIRONMENT'
@@ -44,7 +44,7 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
       }
     }
     configuration: {
-      activeResivionsMode: 'single'
+      activeRevisionsMode: 'single'
       ingress: {
         external: true
         targetPort: 80

@@ -25,7 +25,7 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
       containers: [
         {
           name: 'ordering-api'
-          image: 'eshopdapr/ordering.api:20220331'
+          image: 'eshopdapr/ordering.api:latest'
           env: [
             {
               name: 'ASPNETCORE_ENVIRONMENT'
@@ -93,9 +93,6 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
                 value: 'true'
               }
             ]
-            scopes: [
-              'ordering-api'
-            ]
           }
           {
             name: 'pubsub'
@@ -107,15 +104,12 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
                 secretRef: 'service-bus-connection-string'
               }
             ]
-            scopes: [
-              'ordering-api'
-            ]
           }
         ]
       }
     }
     configuration: {
-      activeResivionsMode: 'single'
+      activeRevisionsMode: 'single'
       ingress: {
         external: false
         targetPort: 80

@@ -2,10 +2,12 @@ param location string
 param uniqueSeed string
 param sqlServerName string = 'sql-${uniqueString(uniqueSeed)}'
 param sqlAdministratorLogin string = 'server_admin'
-param sqlAdministratorLoginPassword string = 'Pass@word'
+@secure()
+param sqlAdministratorLoginPassword string
 param catalogDbName string = 'Microsoft.eShopOnDapr.Services.CatalogDb'
 param identityDbName string = 'Microsoft.eShopOnDapr.Services.IdentityDb'
 param orderingDbName string = 'Microsoft.eShopOnDapr.Services.OrderingDb'
+param keyVaultName string
 
 resource sqlServer 'Microsoft.Sql/servers@2021-05-01-preview' = {
   name: sqlServerName
@@ -49,6 +51,32 @@ resource sqlServer 'Microsoft.Sql/servers@2021-05-01-preview' = {
   }
 }
 
-output catalogDbConnectionString string = 'Server=tcp:${sqlServerName}${environment().suffixes.sqlServerHostname},1433;Initial Catalog=${catalogDbName};Persist Security Info=False;User ID=${sqlAdministratorLogin};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-output identityDbConnectionString string = 'Server=tcp:${sqlServerName}${environment().suffixes.sqlServerHostname},1433;Initial Catalog=${identityDbName};Persist Security Info=False;User ID=${sqlAdministratorLogin};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-output orderingDbConnectionString string = 'Server=tcp:${sqlServerName}${environment().suffixes.sqlServerHostname},1433;Initial Catalog=${orderingDbName};Persist Security Info=False;User ID=${sqlAdministratorLogin};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+resource catalogDbConnectionString 'Microsoft.KeyVault/vaults/secrets@2021-10-01' = {
+  name: '${keyVaultName}/catalogDbConnectionString'
+  properties: {
+    value: 'Server=tcp:${sqlServerName}${environment().suffixes.sqlServerHostname},1433;Initial Catalog=${catalogDbName};Persist Security Info=False;User ID=${sqlAdministratorLogin};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+  }
+  dependsOn: [
+    sqlServer
+  ]
+}
+
+resource identityDbConnectionString 'Microsoft.KeyVault/vaults/secrets@2021-10-01' = {
+  name: '${keyVaultName}/identityDbConnectionString'
+  properties: {
+    value: 'Server=tcp:${sqlServerName}${environment().suffixes.sqlServerHostname},1433;Initial Catalog=${identityDbName};Persist Security Info=False;User ID=${sqlAdministratorLogin};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+  }
+  dependsOn: [
+    sqlServer
+  ]
+}
+
+resource orderingDbConnectionString 'Microsoft.KeyVault/vaults/secrets@2021-10-01' = {
+  name: '${keyVaultName}/orderingDbConnectionString'
+  properties: {
+    value: 'Server=tcp:${sqlServerName}${environment().suffixes.sqlServerHostname},1433;Initial Catalog=${orderingDbName};Persist Security Info=False;User ID=${sqlAdministratorLogin};Password=${sqlAdministratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+  }
+  dependsOn: [
+    sqlServer
+  ]
+}

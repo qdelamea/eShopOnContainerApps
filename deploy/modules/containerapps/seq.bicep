@@ -25,7 +25,7 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
       }
     }
     configuration: {
-      activeResivionsMode: 'single'
+      activeRevisionsMode: 'single'
       ingress: {
         external: true
         targetPort: 80

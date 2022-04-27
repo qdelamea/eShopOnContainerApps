@@ -2,6 +2,7 @@ param location string
 param uniqueSeed string
 param cosmosAccountName string = 'cosmos-${uniqueString(uniqueSeed)}'
 param cosmosDbName string = 'eShop'
+param keyVaultName string
 
 resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-04-15' = {
   name: cosmosAccountName
@@ -51,8 +52,14 @@ resource cosmosCollection 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/co
   }
 }
 
+resource cosmosKey 'Microsoft.KeyVault/vaults/secrets@2021-10-01' = {
+  name: '${keyVaultName}/cosmosKey'
+  properties: {
+    value: cosmosAccount.listKeys().primaryMasterKey
+  }
+}
+
 output cosmosAccountName string = cosmosAccount.name
 output cosmosDbName string = cosmosDbName
 output cosmosUrl string = cosmosAccount.properties.documentEndpoint
-output cosmosKey string = cosmosAccount.listKeys().primaryMasterKey
 output cosmosCollectionName string = cosmosCollection.name

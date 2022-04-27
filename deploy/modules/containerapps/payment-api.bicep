@@ -15,7 +15,7 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
       containers: [
         {
           name: 'payment-api'
-          image: 'eshopdapr/payment.api:20220331'
+          image: 'eshopdapr/payment.api:latest'
           env: [
             {
               name: 'ASPNETCORE_ENVIRONMENT'
@@ -51,15 +51,12 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
                 secretRef: 'service-bus-connection-string'
               }
             ]
-            scopes: [
-              'payment-api'
-            ]
           }
         ]
       }
     }
     configuration: {
-      activeResivionsMode: 'single'
+      activeRevisionsMode: 'single'
       ingress: {
         external: false
         targetPort: 80

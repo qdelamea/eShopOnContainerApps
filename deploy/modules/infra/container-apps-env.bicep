@@ -21,6 +21,7 @@ resource containerAppsEnvironment 'Microsoft.Web/kubeEnvironments@2021-02-01' = 
   name: containerAppsEnvironmentName
   location: location
   properties: {
+    #disable-next-line BCP037
     type: 'Managed'
     internalLoadBalancerEnabled: false
     appLogsConfiguration: {
