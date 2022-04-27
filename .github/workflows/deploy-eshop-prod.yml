@@ -10,15 +10,75 @@ on:
     - main
   workflow_dispatch:
 
-env:
-  REGISTRY_NAME: acrdw5jt22hnrywq
-
 jobs:
 
   build-basket-api:
     uses: qdelamea/eShopOnContainerApps/.github/workflows/service-build.yml@main
     with:
       serviceName: basket-api
+      registryName: acrdw5jt22hnrywq
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+  build-blazor-client:
+    uses: qdelamea/eShopOnContainerApps/.github/workflows/service-build.yml@main
+    with:
+      serviceName: blazor-client
+      registryName: acrdw5jt22hnrywq
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+  build-catalog-api:
+    uses: qdelamea/eShopOnContainerApps/.github/workflows/service-build.yml@main
+    with:
+      serviceName: catalog-api
+      registryName: acrdw5jt22hnrywq
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+  build-identity-api:
+    uses: qdelamea/eShopOnContainerApps/.github/workflows/service-build.yml@main
+    with:
+      serviceName: identity-api
+      registryName: acrdw5jt22hnrywq
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+  build-ordering-api:
+    uses: qdelamea/eShopOnContainerApps/.github/workflows/service-build.yml@main
+    with:
+      serviceName: ordering-api
+      registryName: acrdw5jt22hnrywq
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+  build-payment-api:
+    uses: qdelamea/eShopOnContainerApps/.github/workflows/service-build.yml@main
+    with:
+      serviceName: payment-api
+      registryName: acrdw5jt22hnrywq
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+  build-webshoppingagg:
+    uses: qdelamea/eShopOnContainerApps/.github/workflows/service-build.yml@main
+    with:
+      serviceName: webshoppingagg
+      registryName: acrdw5jt22hnrywq
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+  build-webshoppingapigw:
+    uses: qdelamea/eShopOnContainerApps/.github/workflows/service-build.yml@main
+    with:
+      serviceName: webshoppingapigw
       registryName: acrdw5jt22hnrywq
     secrets:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
