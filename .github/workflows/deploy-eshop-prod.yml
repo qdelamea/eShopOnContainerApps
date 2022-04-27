@@ -114,7 +114,7 @@ jobs:
 
   preview:
     runs-on: ubuntu-latest
-    needs: [lint, validate]
+    needs: [lint-bicep, validate-bicep]
     steps:
     - uses: actions/checkout@v2
     - uses: azure/login@v1
@@ -132,7 +132,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: production
-    needs: preview
+    needs: [preview, build-basket-api, build-blazor-client, build-catalog-api, build-identity-api, build-ordering-api, build-payment-api, build-webshoppingagg, build-webshoppingapigw]
     steps:
     - uses: actions/checkout@v2
     - uses: azure/login@v1
