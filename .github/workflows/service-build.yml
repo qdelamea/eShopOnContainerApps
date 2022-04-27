@@ -1,0 +1,68 @@
+name: service-build
+
+on:
+  workflow_call:
+    inputs:
+      serviceName:
+        required: true
+        type: string
+      registryName:
+        required: true
+        type: string
+    secrets:
+      AZURE_CLIENT_ID:
+        required: true
+      AZURE_CLIENT_SECRET:
+        required: true
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: true
+
+    - name: Build code
+      run: |
+        dotnet restore "src/Web/BlazorClient.Host/BlazorClient.Host.csproj"
+        cd src/Web/BlazorClient.Host
+        dotnet build --no-restore
+
+    - name: Enable experimental features for the Docker daemon and CLI
+      run: |
+          echo $'{\n  "experimental": true\n}' | sudo tee /etc/docker/daemon.json
+          mkdir -p ~/.docker
+          echo $'{\n  "experimental": "enabled"\n}' | sudo tee ~/.docker/config.json
+          sudo service docker restart
+          docker version -f '{{.Client.Experimental}}'
+          docker version -f '{{.Server.Experimental}}'
+
+    - name: Login to ACR
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ inputs.registryName }}.azurecr.io
+        username: ${{ secrets.AZURE_CLIENT_ID }}
+        password: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+    - name: Build service
+      run: sudo -E docker-compose build ${{ inputs.serviceName }}
+      working-directory: ./src
+      shell: bash
+      env:
+        REGISTRY: ${{ inputs.registryName }}.azurecr.io
+        TAG: ${{ github.sha }}
+
+    - name: Push image
+      run: sudo -E docker-compose push ${{ inputs.serviceName }}
+      working-directory: ./src
+      shell: bash
+      env:
+        REGISTRY: ${{ inputs.registryName }}.azurecr.io
+        TAG: ${{ github.sha }}

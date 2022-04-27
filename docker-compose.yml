@@ -21,7 +21,7 @@ services:
     image: openzipkin/zipkin-slim
 
   basket-api:
-    image: ${REGISTRY:-eshopdapr}/basket.api:${TAG:-latest}
+    image: ${REGISTRY}/eshop/basket-api:${TAG}
     build:
       context: .
       dockerfile: src/Services/Basket/Basket.API/Dockerfile

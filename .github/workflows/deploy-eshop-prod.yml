@@ -1,0 +1,25 @@
+name: deploy-eshop-prod
+concurrency: eshop-prod
+
+on: 
+  push:
+    branches: 
+      - main
+  pull_request:
+    branches:
+    - main
+  workflow_dispatch:
+
+env:
+  REGISTRY_NAME: acrdw5jt22hnrywq
+
+jobs:
+
+  build-basket-api:
+    uses: qdelamea/eShopOnContainerApps/.github/workflows/service-build.yml@main
+    with:
+      serviceName: basket.api
+      registryName: ${{ env.REGISTRY_NAME }}
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
