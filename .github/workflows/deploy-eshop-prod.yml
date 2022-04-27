@@ -10,9 +10,14 @@ on:
     - main
   workflow_dispatch:
 
+env:
+  AZURE_RESOURCEGROUP_NAME: eShopRG
+
+
 jobs:
 
   build-basket-api:
+  
     uses: qdelamea/eShopOnContainerApps/.github/workflows/service-build.yml@main
     with:
       serviceName: basket-api
@@ -83,3 +88,27 @@ jobs:
     secrets:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+  lint-bicep:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Bicep linter
+      run: az bicep build --file deploy/eshop.bicep
+
+  validate-bicep:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: azure/login@v1
+      name: Sign in to Azure
+      with:
+        creds: {"clientId:": "${{ secrets.AZURE_CLIENT_ID }}", "clientSecret": "${{ secrets.AZURE_CLIENT_SECRET }}"}
+    - uses: azure/arm-deploy@v1
+      name: Run preflight validation
+      with:
+        deploymentName: eshop-dpl${{ github.run_number }}
+        resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
+        template: ./deploy/eshop.bicep
+        deploymentMode: Validate
+
