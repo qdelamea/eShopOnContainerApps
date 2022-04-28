@@ -11,7 +11,7 @@ param enabledForDeployment bool = false
 param enabledForDiskEncryption bool = false
 
 @description('Specifies whether Azure Resource Manager is permitted to retrieve secrets from the key vault.')
-param enabledForTemplateDeployment bool = false
+param enabledForTemplateDeployment bool = true
 
 @description('Specifies the Azure Active Directory tenant ID that should be used for authenticating requests to the key vault. Get it by using Get-AzSubscription cmdlet.')
 param tenantId string = subscription().tenantId
@@ -53,6 +53,10 @@ param secretsPermissions array = [
 ])
 param skuName string = 'standard'
 
+@description('Specifies the value of the sqlAdministratorLoginPassword secret.')
+@secure()
+param secretValue string
+
 resource kv 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
   name: keyVaultName
   location: location
@@ -79,5 +83,13 @@ resource kv 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
       defaultAction: 'Allow'
       bypass: 'AzureServices'
     }
+  }
+}
+
+resource sqlAdministratorLoginPassword 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  parent: kv
+  name: 'sqlAdministratorLoginPassword'
+  properties: {
+    value: secretValue
   }
 }
