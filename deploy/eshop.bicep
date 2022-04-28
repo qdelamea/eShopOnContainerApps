@@ -1,6 +1,6 @@
 param location string = resourceGroup().location
 param uniqueSeed string = '${resourceGroup().id}-${deployment().name}'
-param keyVaultName string = 'eShopKVhqyobk5cu5ahg'
+param keyVaultName string = 'eShopVaulthqyobk5cu5ahg'
 
 resource keyVault 'Microsoft.KeyVault/vaults@2021-04-01-preview' existing = {
   name: keyVaultName
