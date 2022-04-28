@@ -4,11 +4,11 @@ param seqFqdn string
 param containerAppsEnvironmentId string
 param containerAppsEnvironmentDomain string
 
-resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
+resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
   name: 'webshopping-agg'
   location: location
   properties: {
-    kubeEnvironmentId: containerAppsEnvironmentId
+    managedEnvironmentId: containerAppsEnvironmentId
     template: {
       containers: [
         {
@@ -54,14 +54,14 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
         minReplicas: 1
         maxReplicas: 1
       }
+    }
+    configuration: {
+      activeRevisionsMode: 'single'
       dapr: {
         enabled: true
         appId: 'webshoppingagg'
         appPort: 80
       }
-    }
-    configuration: {
-      activeRevisionsMode: 'single'
       ingress: {
         external: false
         targetPort: 80

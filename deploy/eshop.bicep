@@ -15,6 +15,11 @@ module containerAppsEnvironment 'modules/infra/container-apps-env.bicep' = {
   params: {
     location: location
     uniqueSeed: uniqueSeed
+    cosmosDbName: cosmos.outputs.cosmosDbName
+    cosmosCollectionName: cosmos.outputs.cosmosCollectionName
+    cosmosUrl: cosmos.outputs.cosmosUrl
+    cosmosKey: keyVault.getSecret('cosmosKey')
+    serviceBusConnectionString: keyVault.getSecret('serviceBusConnectionString')
   }
 }
 
@@ -63,12 +68,6 @@ module basketApi 'modules/containerapps/basket-api.bicep' = {
     seqFqdn: seq.outputs.fqdn
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
     containerAppsEnvironmentDomain: containerAppsEnvironment.outputs.containerAppsEnvironmentDomain
-    cosmosDbName: cosmos.outputs.cosmosDbName
-    cosmosCollectionName: cosmos.outputs.cosmosCollectionName
-    cosmosUrl: cosmos.outputs.cosmosUrl
-    cosmosKey: keyVault.getSecret('cosmosKey')
-    serviceBusConnectionString: keyVault.getSecret('serviceBusConnectionString')
-    containerRegistryPassword: keyVault.getSecret('containerRegistryPassword')
   }
 }
 
@@ -99,7 +98,6 @@ module catalogApi 'modules/containerapps/catalog-api.bicep' = {
     seqFqdn: seq.outputs.fqdn
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
     catalogDbConnectionString: keyVault.getSecret('catalogDbConnectionString')
-    serviceBusConnectionString: keyVault.getSecret('serviceBusConnectionString')
   }
 }
 
@@ -133,12 +131,7 @@ module orderingApi 'modules/containerapps/ordering-api.bicep' = {
     seqFqdn: seq.outputs.fqdn
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
     containerAppsEnvironmentDomain: containerAppsEnvironment.outputs.containerAppsEnvironmentDomain
-    cosmosDbName: cosmos.outputs.cosmosDbName
-    cosmosCollectionName: cosmos.outputs.cosmosCollectionName
-    cosmosUrl: cosmos.outputs.cosmosUrl
-    cosmosKey: keyVault.getSecret('cosmosKey')
     orderingDbConnectionString: keyVault.getSecret('orderingDbConnectionString')
-    serviceBusConnectionString: keyVault.getSecret('serviceBusConnectionString')
   }
 }
 
@@ -153,7 +146,6 @@ module paymentApi 'modules/containerapps/payment-api.bicep' = {
     location: location
     seqFqdn: seq.outputs.fqdn
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
-    serviceBusConnectionString: keyVault.getSecret('serviceBusConnectionString')
   }
 }
 
