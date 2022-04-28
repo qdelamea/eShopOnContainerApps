@@ -75,6 +75,10 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2022-01-01-
           name: 'actorStateStore'
           value: 'true'
         }
+        {
+          name: 'masterKey'
+          secretRef: 'masterkey'
+        }
       ]
       scopes: [
         'basket-api'
@@ -82,7 +86,7 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2022-01-01-
       ]
       secrets: [
         {
-          name: 'masterKey'
+          name: 'masterkey'
           value: cosmosKey
         }
       ]
@@ -95,6 +99,12 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2022-01-01-
       componentType: 'pubsub.azure.servicebus'
       version: 'v1'
       ignoreErrors: false
+      metadata: [
+        {
+          name: 'connectionString'
+          secretRef: 'connectionstring'
+        }
+      ]
       scopes: [
         'basket-api'
         'catalog-api'
@@ -103,7 +113,7 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2022-01-01-
       ]
       secrets: [
         {
-          name: 'connectionString'
+          name: 'connectionstring'
           value: serviceBusConnectionString
         }
       ]
