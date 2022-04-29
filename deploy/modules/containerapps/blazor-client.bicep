@@ -8,6 +8,9 @@ param imageTag string
 @secure()
 param registryPassword string
 
+var registryName = 'acrdw5jt22hnrywq.azurecr.io'
+var registryEndpoint = '${registryName}.azurecr.io'
+
 resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
   name: 'blazor-client'
   location: location
@@ -17,7 +20,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
       containers: [
         {
           name: 'blazor-client'
-          image: 'eshop/blazor-client:${imageTag}'
+          image: '${registryEndpoint}/eshop/blazor-client:${imageTag}'
           env: [
             {
               name: 'ASPNETCORE_ENVIRONMENT'
@@ -55,8 +58,8 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
       }
       registries: [
         {
-          server: 'acrdw5jt22hnrywq.azurecr.io'
-          username: 'acrdw5jt22hnrywq'
+          server: registryEndpoint
+          username: registryName
           passwordSecretRef: 'registrypassword'
         }
       ]

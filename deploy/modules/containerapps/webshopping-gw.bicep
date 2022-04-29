@@ -7,6 +7,9 @@ param imageTag string
 @secure()
 param registryPassword string
 
+var registryName = 'acrdw5jt22hnrywq.azurecr.io'
+var registryEndpoint = '${registryName}.azurecr.io'
+
 resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
   name: 'webshopping-gw'
   location: location
@@ -16,7 +19,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
       containers: [
         {
           name: 'webshopping-gw'
-          image: 'eshop/webshoppingapigw:${imageTag}'
+          image: '${registryEndpoint}/eshop/webshoppingapigw:${imageTag}'
           env: [
             {
               name: 'ENVOY_CATALOG_API_ADDRESS'
@@ -56,8 +59,8 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
       }
       registries: [
         {
-          server: 'acrdw5jt22hnrywq.azurecr.io'
-          username: 'acrdw5jt22hnrywq'
+          server: registryEndpoint
+          username: registryName
           passwordSecretRef: 'registrypassword'
         }
       ]
