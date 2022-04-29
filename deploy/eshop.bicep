@@ -1,5 +1,5 @@
 param location string = resourceGroup().location
-param uniqueSeed string = '${resourceGroup().id}-${deployment().name}'
+param uniqueSeed string = uniqueString(resourceGroup().id)
 param keyVaultName string = 'eShopVaulthqyobk5cu5ahg'
 
 param basketApiImageTag string
