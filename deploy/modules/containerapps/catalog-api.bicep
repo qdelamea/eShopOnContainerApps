@@ -2,6 +2,10 @@ param location string
 param seqFqdn string
 
 param containerAppsEnvironmentId string
+param imageTag string
+
+@secure()
+param registryPassword string
 
 @secure()
 param catalogDbConnectionString string
@@ -15,7 +19,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
       containers: [
         {
           name: 'catalog-api'
-          image: 'eshopdapr/catalog.api:latest'
+          image: 'eshop/catalog-api:${imageTag}'
           env: [
             {
               name: 'ASPNETCORE_ENVIRONMENT'
@@ -57,7 +61,18 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
         targetPort: 80
         allowInsecure: true
       }
+      registries: [
+        {
+          server: 'acrdw5jt22hnrywq.azurecr.io'
+          username: 'acrdw5jt22hnrywq'
+          passwordSecretRef: 'registrypassword'
+        }
+      ]
       secrets: [
+        {
+          name: 'registrypassword'
+          value: registryPassword
+        }
         {
           name: 'catalogdb-connection-string'
           value: catalogDbConnectionString

@@ -3,6 +3,10 @@ param seqFqdn string
 
 param containerAppsEnvironmentId string
 param containerAppsEnvironmentDomain string
+param imageTag string
+
+@secure()
+param registryPassword string
 
 resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
   name: 'webshopping-agg'
@@ -13,7 +17,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
       containers: [
         {
           name: 'webshopping-agg'
-          image: 'eshopdapr/webshoppingagg:latest'
+          image: 'eshop/webshoppingagg:${imageTag}'
           env: [
             {
               name: 'ASPNETCORE_ENVIRONMENT'
@@ -67,6 +71,19 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
         targetPort: 80
         allowInsecure: true
       }
+      registries: [
+        {
+          server: 'acrdw5jt22hnrywq.azurecr.io'
+          username: 'acrdw5jt22hnrywq'
+          passwordSecretRef: 'registrypassword'
+        }
+      ]
+      secrets: [
+        {
+          name: 'registrypassword'
+          value: registryPassword
+        }
+      ]
     }
   }
 }

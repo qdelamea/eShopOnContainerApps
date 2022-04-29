@@ -3,6 +3,10 @@ param seqFqdn string
 
 param containerAppsEnvironmentId string
 param containerAppsEnvironmentDomain string
+param imageTag string
+
+@secure()
+param registryPassword string
 
 resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
   name: 'blazor-client'
@@ -13,7 +17,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
       containers: [
         {
           name: 'blazor-client'
-          image: 'eshopdapr/blazor.client:latest'
+          image: 'eshop/blazor-client:${imageTag}'
           env: [
             {
               name: 'ASPNETCORE_ENVIRONMENT'
@@ -49,6 +53,19 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
         external: true
         targetPort: 80
       }
+      registries: [
+        {
+          server: 'acrdw5jt22hnrywq.azurecr.io'
+          username: 'acrdw5jt22hnrywq'
+          passwordSecretRef: 'registrypassword'
+        }
+      ]
+      secrets: [
+        {
+          name: 'registrypassword'
+          value: registryPassword
+        }
+      ]
     }
   }
 }

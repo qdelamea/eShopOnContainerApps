@@ -2,6 +2,15 @@ param location string = resourceGroup().location
 param uniqueSeed string = '${resourceGroup().id}-${deployment().name}'
 param keyVaultName string = 'eShopVaulthqyobk5cu5ahg'
 
+param basketApiImageTag string
+param blazorClientImageTag string
+param catalogApiImageTag string
+param identityApiImageTag string
+param orderingApiImageTag string
+param paymentApiImageTag string
+param webshoppingAggImageTag string
+param webshoppingGWImageTag string
+
 resource keyVault 'Microsoft.KeyVault/vaults@2021-04-01-preview' existing = {
   name: keyVaultName
 }
@@ -68,6 +77,8 @@ module basketApi 'modules/containerapps/basket-api.bicep' = {
     seqFqdn: seq.outputs.fqdn
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
     containerAppsEnvironmentDomain: containerAppsEnvironment.outputs.containerAppsEnvironmentDomain
+    imageTag:basketApiImageTag
+    registryPassword: keyVault.getSecret('registrypassword')
   }
 }
 
@@ -82,6 +93,8 @@ module blazorClient 'modules/containerapps/blazor-client.bicep' = {
     seqFqdn: seq.outputs.fqdn
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
     containerAppsEnvironmentDomain: containerAppsEnvironment.outputs.containerAppsEnvironmentDomain
+    imageTag: blazorClientImageTag
+    registryPassword: keyVault.getSecret('registrypassword')
   }
 }
 
@@ -98,6 +111,8 @@ module catalogApi 'modules/containerapps/catalog-api.bicep' = {
     seqFqdn: seq.outputs.fqdn
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
     catalogDbConnectionString: keyVault.getSecret('catalogDbConnectionString')
+    imageTag: catalogApiImageTag
+    registryPassword: keyVault.getSecret('registrypassword')
   }
 }
 
@@ -113,7 +128,9 @@ module identityApi 'modules/containerapps/identity-api.bicep' = {
     seqFqdn: seq.outputs.fqdn
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
     containerAppsEnvironmentDomain: containerAppsEnvironment.outputs.containerAppsEnvironmentDomain
+    imageTag: identityApiImageTag
     identityDbConnectionString: keyVault.getSecret('identityDbConnectionString')
+    registryPassword: keyVault.getSecret('registrypassword')
   }
 }
 
@@ -131,7 +148,9 @@ module orderingApi 'modules/containerapps/ordering-api.bicep' = {
     seqFqdn: seq.outputs.fqdn
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
     containerAppsEnvironmentDomain: containerAppsEnvironment.outputs.containerAppsEnvironmentDomain
+    imageTag: orderingApiImageTag
     orderingDbConnectionString: keyVault.getSecret('orderingDbConnectionString')
+    registryPassword: keyVault.getSecret('registrypassword')
   }
 }
 
@@ -146,6 +165,8 @@ module paymentApi 'modules/containerapps/payment-api.bicep' = {
     location: location
     seqFqdn: seq.outputs.fqdn
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
+    imageTag: paymentApiImageTag
+    registryPassword: keyVault.getSecret('registrypassword')
   }
 }
 
@@ -171,6 +192,8 @@ module webshoppingAgg 'modules/containerapps/webshopping-agg.bicep' = {
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
     containerAppsEnvironmentDomain: containerAppsEnvironment.outputs.containerAppsEnvironmentDomain
     seqFqdn: seq.outputs.fqdn
+    imageTag: webshoppingAggImageTag
+    registryPassword: keyVault.getSecret('registrypassword')
   }
 }
 
@@ -184,6 +207,8 @@ module webshoppingGW 'modules/containerapps/webshopping-gw.bicep' = {
     location: location
     containerAppsEnvironmentId: containerAppsEnvironment.outputs.containerAppsEnvironmentId
     containerAppsEnvironmentDomain: containerAppsEnvironment.outputs.containerAppsEnvironmentDomain
+    imageTag: webshoppingGWImageTag
+    registryPassword: keyVault.getSecret('registrypassword')
   }
 }
 
