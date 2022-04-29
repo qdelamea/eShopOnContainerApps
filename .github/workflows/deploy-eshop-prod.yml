@@ -136,7 +136,16 @@ jobs:
         inlineScript: |
             az deployment group what-if \
               --resource-group ${{ env.AZURE_RESOURCEGROUP_NAME }} \
-              --template-file deploy/eshop.bicep
+              --template-file deploy/eshop.bicep \
+              --parameters  basketApiImageTag=${{ github.sha }} \
+                            blazorClientImageTag=${{ github.sha }} \
+                            catalogApiImageTag=${{ github.sha }} \
+                            identityApiImageTag=${{ github.sha }} \
+                            orderingApiImageTag=${{ github.sha }} \
+                            paymentApiImageTag=${{ github.sha }} \
+                            webshoppingAggImageTag=${{ github.sha }} \
+                            webshoppingGWImageTag=${{ github.sha }}
+
 
   deploy:
     runs-on: ubuntu-latest
