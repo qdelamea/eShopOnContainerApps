@@ -7,7 +7,7 @@ param imageTag string
 @secure()
 param registryPassword string
 
-var registryName = 'acrdw5jt22hnrywq.azurecr.io'
+var registryName = 'acrdw5jt22hnrywq'
 var registryEndpoint = '${registryName}.azurecr.io'
 
 resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
