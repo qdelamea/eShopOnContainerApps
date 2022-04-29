@@ -55,7 +55,11 @@ param skuName string = 'standard'
 
 @description('Specifies the value of the sqlAdministratorLoginPassword secret.')
 @secure()
-param secretValue string
+param sqlAdministratorLoginPasswordValue string
+
+@description('Specifies the value of the registryPassword secret.')
+@secure()
+param containerRegistryPasswordValue string
 
 resource kv 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
   name: keyVaultName
@@ -90,6 +94,14 @@ resource sqlAdministratorLoginPassword 'Microsoft.KeyVault/vaults/secrets@2021-1
   parent: kv
   name: 'sqlAdministratorLoginPassword'
   properties: {
-    value: secretValue
+    value: sqlAdministratorLoginPasswordValue
+  }
+}
+
+resource containerRegistryPassword 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  parent: kv
+  name: 'registrypassword'
+  properties: {
+    value: containerRegistryPasswordValue
   }
 }
