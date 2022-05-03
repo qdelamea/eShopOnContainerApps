@@ -50,10 +50,10 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
         maxReplicas: 5
         rules: [
           {
-            name: 'http-rule',
+            name: 'http-rule'
             http: {
               metadata: {
-                  concurrentRequests: 100
+                  concurrentRequests: '100'
               }
             }
           }
