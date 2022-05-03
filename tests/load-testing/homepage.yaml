@@ -3,3 +3,9 @@ testName: HomePage
 testPlan: homepage.jmx
 description: 'Home page Test Run'
 engineInstances: 1
+failureCriteria:
+  - avg(response_time_ms) > 300
+  - percentage(error) > 50
+env:
+  - name: eshop_webapp
+    value: blazor-client.ashytree-cfd30196.eastus.azurecontainerapps.io
