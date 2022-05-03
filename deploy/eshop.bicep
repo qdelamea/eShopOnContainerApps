@@ -224,3 +224,15 @@ module webstatus 'modules/containerapps/webstatus.bicep' = {
     containerAppsEnvironmentDomain: containerAppsEnvironment.outputs.containerAppsEnvironmentDomain
   }
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Testing
+////////////////////////////////////////////////////////////////////////////////
+
+module loadTesting 'modules/testing/load-testing.bicep' = {
+  name: '${deployment().name}-load-tests'
+  params: {
+    location: location
+    uniqueSeed: uniqueSeed
+  }
+}

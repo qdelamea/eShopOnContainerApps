@@ -1,0 +1,5 @@
+version: v0.1
+testName: HomePage
+testPlan: homepage.jmx
+description: 'Home page Test Run'
+engineInstances: 1
