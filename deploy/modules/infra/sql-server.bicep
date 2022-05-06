@@ -29,6 +29,12 @@ resource sqlServer 'Microsoft.Sql/servers@2021-05-01-preview' = {
   resource catalogDB 'databases@2021-05-01-preview' = {
     name: catalogDbName
     location: location
+    sku: {
+      name: 'GP_S_Gen5'
+      tier: 'GeneralPurpose'
+      family: 'Gen5'
+      capacity: 1
+    }
     properties: {
       collation: 'SQL_Latin1_General_CP1_CI_AS'
     }
@@ -37,6 +43,12 @@ resource sqlServer 'Microsoft.Sql/servers@2021-05-01-preview' = {
   resource identityDb 'databases@2021-05-01-preview' = {
     name: 'Microsoft.eShopOnDapr.Services.IdentityDb'
     location: location
+    sku: {
+      name: 'GP_S_Gen5'
+      tier: 'GeneralPurpose'
+      family: 'Gen5'
+      capacity: 1
+    }
     properties: {
       collation: 'SQL_Latin1_General_CP1_CI_AS'
     }
@@ -45,6 +57,12 @@ resource sqlServer 'Microsoft.Sql/servers@2021-05-01-preview' = {
   resource orderingDb 'databases@2021-05-01-preview' = {
     name: 'Microsoft.eShopOnDapr.Services.OrderingDb'
     location: location
+    sku: {
+      name: 'GP_S_Gen5'
+      tier: 'GeneralPurpose'
+      family: 'Gen5'
+      capacity: 1
+    }
     properties: {
       collation: 'SQL_Latin1_General_CP1_CI_AS'
     }
