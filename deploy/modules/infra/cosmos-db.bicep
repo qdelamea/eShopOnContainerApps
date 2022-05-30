@@ -1,8 +1,9 @@
 param location string
 param uniqueSeed string
+param keyVaultName string
+param failoverLocation string
 param cosmosAccountName string = 'cosmos-${uniqueString(uniqueSeed)}'
 param cosmosDbName string = 'eShop'
-param keyVaultName string
 
 resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-04-15' = {
   name: cosmosAccountName
@@ -15,9 +16,17 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-04-15' = {
     }
     locations: [
       {
+        failoverPriority: 0
         locationName: location
+        isZoneRedundant: false
+      }
+      {
+        failoverPriority: 1
+        locationName: failoverLocation
+        isZoneRedundant: false
       }
     ]
+    enableAutomaticFailover: true
     capabilities: [
       {
         name: 'EnableServerless'

@@ -1,4 +1,5 @@
 param location string = resourceGroup().location
+param comosDBFailoverLocation string = 'westus'
 param uniqueSeed string = uniqueString(resourceGroup().id)
 param keyVaultName string = 'eShopVaulthqyobk5cu5ahg'
 
@@ -36,6 +37,7 @@ module cosmos 'modules/infra/cosmos-db.bicep' = {
   name: '${deployment().name}-infra-cosmos-db'
   params: {
     location: location
+    failoverLocation: comosDBFailoverLocation
     uniqueSeed: uniqueSeed
     keyVaultName: keyVaultName
   }
