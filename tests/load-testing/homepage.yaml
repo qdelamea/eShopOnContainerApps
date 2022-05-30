@@ -4,5 +4,5 @@ testPlan: homepage.jmx
 description: 'Home page Test Run'
 engineInstances: 20
 failureCriteria:
-  - avg(response_time_ms) > 300
+  - avg(response_time_ms) > 600
   - percentage(error) > 50
