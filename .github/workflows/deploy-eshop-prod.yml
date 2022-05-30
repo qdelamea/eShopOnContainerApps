@@ -188,14 +188,12 @@ jobs:
         continue-on-error: false
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         with:
           loadTestConfigFile: './tests/load-testing/homepage.yaml'
           loadTestResource: 'eShopLoadTests'
           resourceGroup: ${{ env.AZURE_RESOURCEGROUP_NAME }}
-
       - uses: actions/upload-artifact@v2
         with:
           name: loadTestResults
