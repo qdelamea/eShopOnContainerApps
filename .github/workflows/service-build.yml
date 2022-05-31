@@ -51,13 +51,20 @@ jobs:
         username: ${{ secrets.AZURE_CLIENT_ID }}
         password: ${{ secrets.AZURE_CLIENT_SECRET }}
 
-    - name: Build service
+    - name: Build image
       run: sudo -E docker-compose build ${{ inputs.serviceName }}
       working-directory: ./src
       shell: bash
       env:
         REGISTRY: ${{ inputs.registryName }}.azurecr.io
         TAG: ${{ github.sha }}
+
+    - name: Scan image
+      uses: Azure/container-scan@v0
+      with:
+        image-name: ${{ inputs.registryName }}.azurecr.io/eshop/${{ inputs.serviceName }}:${{ github.sha }}
+        severity-threshold: CRITICAL
+        run-quality-checks: true
 
     - name: Push image
       run: sudo -E docker-compose push ${{ inputs.serviceName }}
