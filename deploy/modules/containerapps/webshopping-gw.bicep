@@ -42,7 +42,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
       ]
       scale: {
         minReplicas: 1
-        maxReplicas: 5
+        maxReplicas: 10
         rules: [
           {
             name: 'http-rule'
