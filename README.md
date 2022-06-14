@@ -1,6 +1,6 @@
 # eShop on Azure Container Apps
 
-An enhancement of the *[eShopOnDapr](https://github.com/dotnet-architecture/eShopOnDapr)* project that proposes to deploy eShop on Azure. The microservices are deployed on Azure Container Apps, a new Azure service dedicated to deploying microservices at a lower rate, while the other components use Azure classic services such as Service Bus, Cosmos DB, and SQL Database.
+An enhancement of the *[eShopOnDapr](https://github.com/dotnet-architecture/eShopOnDapr)* project that proposes to deploy eShop on Azure. The microservices are deployed on Azure Container Apps, a new Azure service dedicated to deploying microservices quickly with minimal effort, while the other components use Azure classic services such as Service Bus, Cosmos DB, and SQL Database.
 
 ## Learn more about this project
 
