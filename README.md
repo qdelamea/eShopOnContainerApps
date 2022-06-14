@@ -1,6 +1,19 @@
-# eShop on Dapr
+# eShop on Azure Container Apps
 
-A sample .NET Core distributed application based on *[eShopOnContainers](https://github.com/dotnet-architecture/eShopOnContainers)*, powered by [Dapr](https://dapr.io/).
+An enhancement of the *[eShopOnDapr](https://github.com/dotnet-architecture/eShopOnDapr)* project that proposes to deploy eShop on Azure. The microservices are deployed on Azure Container Apps, a new Azure service dedicated to deploying microservices at a lower rate, while the other components use Azure classic services such as Service Bus, Cosmos DB, and SQL Database.
+
+## Learn more about this project
+
+This repository serves as a reference example for the e-book *[Designing high-quality distributed Cloud-Native applications on Azure](aka.ms/future-cloud-native-apps)*. This e-book covers the latest trends in application development and showcases the best ways to take advantage of the latest services, such as Azure Container Apps, Azure Load Testing, and Azure Chaos Studio to test and scale your applications. This document also provides a comprehensive overview of the [Microsoft Azure Well-Architected Framework](https://docs.microsoft.com/en-us/azure/architecture/framework/) and how to apply it to your projects.
+
+Topics such as architecture patterns, choice of cloud services, availability, resilience, and security are covered in detail. The concepts described in this e-book are applied through the eShopOnContainerApps project.
+
+If you'd like to learn more about how to build distributed cloud-native applications, feel free to check out the e-book available here: https://aka.ms/future-cloud-native-apps.
+
+
+## What is eShopOnDapr
+
+eShopOnDapr is a sample .NET Core distributed application based on *[eShopOnContainers](https://github.com/dotnet-architecture/eShopOnContainers)*, powered by [Dapr](https://dapr.io/).
 
 The accompanying e-book **Dapr for .NET developers** uses the sample code in this repository to demonstrate Dapr features and benefits. You can [read the online version](https://docs.microsoft.com/dotnet/architecture/dapr-for-net-developers/) and [download the PDF](https://aka.ms/dapr-ebook) for free.
 
@@ -37,19 +50,6 @@ As focus of the eShopOnDapr reference application is on Dapr, the original appli
 
 - Finally, the event bus enables asynchronous publish/subscribe messaging across microservices. Developers can plug in any Dapr-supported message broker.
 
-## Getting started
-
-eShopOnDapr runs in containers and requires Docker to run. There are various ways to start the application:
-
-- [Run eShopOnDapr from the CLI](docs/run-eshop.md#run-eshopondapr-from-the-cli)
-- [Run eShopOnDapr from Visual Studio (best F5 debugging experience)](docs/run-eshop.md#run-eshopondapr-from-visual-studio)
-- [Run eShopOnDapr from Visual Studio Code (allows you to debug individual containers))](docs/run-eshop.md#run-eshopondapr-from-visual-studio-code)
-- [Run eShopOnDapr in Kubernetes](docs/run-eshop.md#run-eshopondapr-on-kubernetes)
-
-Note that it will take a little while to start all containers. eShopOnDapr includes a health UI that you can use to see if the containers are ready. You can access it at http://localhost:5107/healthchecks-ui.
-
-When all microservices are healthy, you can navigate to http://localhost:5104 to view the eShopOnDapr UI.
-
-### Attributions
+## Attributions
 
 Model photo by  [Angelo Pantazis](https://unsplash.com/@angelopantazis?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)  on  [Unsplash](https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
